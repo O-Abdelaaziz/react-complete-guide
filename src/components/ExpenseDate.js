@@ -17,3 +17,5 @@ export const ExpenseDate = (props) => {
         </div>
     )
 }
+
+export default ExpenseDate;
