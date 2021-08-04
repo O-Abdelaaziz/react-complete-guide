@@ -3,7 +3,8 @@ import Card from '../UI/Card';
 import ExpenseDate from './ExpenseDate';
 import './ExpenseItem.css';
 import faker from 'faker';
-export const ExpenseItem = (props) => {
+
+const ExpenseItem = (props) => {
 
     //let title=props.title;
     const [title, setTitle] = useState(props.title);
