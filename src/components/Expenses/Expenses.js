@@ -14,6 +14,7 @@ const Expenses = (props) => {
 
 
     return (
+        //add key={item.id} props to avoid any bugs of list rendering
         <Card className="expenses">
             <ExpensesFilter selected={filterYear} onChangeFilter={filterChangeHandler}/>
             {props.items.map((item) => (
