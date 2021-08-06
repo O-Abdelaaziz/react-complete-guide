@@ -14,7 +14,7 @@ const App = () => {
     setCourseGoals(prevGoals => {
       const updatedGoals = [...prevGoals];
       //Error is here: we have same id (static value).
-      updatedGoals.unshift({ text: enteredText, id: 'goal1' });
+      updatedGoals.unshift({ text: enteredText, id: Math.random().toString() });
       return updatedGoals;
     });
   };
