@@ -20,7 +20,14 @@ const AddUser = (props) => {
 
     const submitHandler=(event)=>{
         event.preventDefault();
-        console.log(event);
+        if(enteredUsername.trim().length===0 || enteredAge.trim().length){
+            return;
+        }
+        if(+enteredAge<1){
+            return;
+        }
+        setEnteredUsername('');
+        setEnteredAge('');
     }
 
     return (
