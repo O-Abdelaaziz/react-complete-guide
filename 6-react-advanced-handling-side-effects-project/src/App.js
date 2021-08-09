@@ -7,9 +7,28 @@ import MainHeader from './components/MainHeader/MainHeader';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  //#region check User Info
+  /**
+   * this approach is disadvantage to going with
+   * is that we would create an infinite loop
+   */
+  /**
+   * How To:
+   * we check if is stored 
+   * if is stored (storedUserLoggedInData ==='1') we set is logged in to true
+   * each time we called the useState the component function re-executes (means the it self)
+   */
+  const storedUserLoggedInData=localStorage.getItem('isLoggedIn');
+  if(storedUserLoggedInData ==='1'){
+    setIsLoggedIn(true);
+  }
+  //#endregion
+
+
   const loginHandler = (email, password) => {
     // We should of course check email and password
     // But it's just a dummy/ demo anyways
+    localStorage.setItem('isLoggedIn','1');
     setIsLoggedIn(true);
   };
 
