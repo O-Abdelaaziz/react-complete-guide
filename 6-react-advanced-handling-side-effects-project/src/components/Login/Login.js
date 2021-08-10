@@ -40,20 +40,24 @@ const Login = (props) => {
     passwordReducer,
     {value:'',isValid:false});  
 
-  // useEffect(() => {
 
-  //   const identifier = setTimeout(() => {
-  //         console.log('Checking the form validity');
-  //         setFormIsValid(
-  //           enteredEmail.includes('@') && enteredPassword.trim().length > 6
-  //         );
-  //       }, 500);
-  //   return ()=>{
-  //     console.log('Clean up the timer');
-  //     clearTimeout(identifier);
-  //   }    
+    const {isValid:emailIsValid}=emailSate;
+    const {isValid:passwordIsValid}=passwordState;
 
-  // }, [enteredEmail,enteredPassword]);
+  useEffect(() => {
+
+    const identifier = setTimeout(() => {
+          console.log('Checking the form validity');
+          setFormIsValid(
+            emailIsValid && passwordIsValid
+          );
+        }, 500);
+    return ()=>{
+      console.log('Clean up the timer');
+      clearTimeout(identifier);
+    }    
+
+  }, [emailIsValid,passwordIsValid]);
 
   useEffect(() => {
     console.log('Effect is running !!!');
