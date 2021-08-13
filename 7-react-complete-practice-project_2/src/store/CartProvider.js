@@ -9,10 +9,25 @@ const defaultCartStat={
 
 const cartReducer=(statSnapshot,action)=>{
     if(action.type==='ADD'){
-        const updatItems=statSnapshot.items.concat(action.item);
         const updateTotalAmount=statSnapshot.totalAmount +(action.item.price * action.item.amount);
+        const existingCartItemIndex=statSnapshot.items.findIndex(item=>item.id===action.id);
+        const existingCartItem=statSnapshot.items[existingCartItemIndex];
+       
+        let updatedItems;
+       
+        if(existingCartItem){
+            let updatedItem={
+                ...existingCartItem,
+                amount:existingCartItem.amount + action.item.amount
+            };
+            updatedItems=[...statSnapshot.items];
+            updatedItems[existingCartItemIndex]=updatedItem
+        }else{
+            updatedItems=statSnapshot.items.concat(action.item);
+        }
+
         return {
-            items:updatItems,
+            items:updatedItems,
             totalAmount:updateTotalAmount,
         }
     }
