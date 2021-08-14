@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 
 import './App.css';
+import DemoOutPut from './components/Demo/DemoOutPut';
 import Button from './components/UI/Button/Button';
 
 function App() {
@@ -14,8 +15,8 @@ function App() {
   return (
     <div className="app">
       <h1>Hi there!</h1>
+      <DemoOutPut show={showParagraph}/>
       <Button onClick={toggleParagraphHandler} >Toggle Paragraph !!!</Button>
-      {showParagraph && <p>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...</p>}
     </div>
   );
 }
