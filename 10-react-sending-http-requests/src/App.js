@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState,useCallback} from 'react';
 
 import MoviesList from './components/MoviesList';
 import './App.css';
@@ -9,8 +9,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  async function fetchMoviesHandler() {
-    console.log('button clicked');
+  const fetchMoviesHandler= useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
@@ -39,7 +38,12 @@ function App() {
     }
     setIsLoading(false);
 
-   }
+   },[]);
+
+   useEffect(() => {
+    fetchMoviesHandler();
+
+  }, [fetchMoviesHandler]);
 
   // you can use this and avoid inline check section element
   //  let content = <p>Found no movies.</p>;
