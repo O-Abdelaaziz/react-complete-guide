@@ -15,6 +15,10 @@ const SimpleInput = (props) => {
 
   const formSubmissionHandler=(event)=>{
     event.preventDefault();
+    if(enteredName.trim() === ''){
+      console.log('name is empty!');
+      return;
+    }
     console.log('Get value using useState: ',enteredName);
     console.log('Get value using useRef: ',refInputName.current.value);
     setEnteredName('');
