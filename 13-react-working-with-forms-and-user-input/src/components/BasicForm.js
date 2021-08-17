@@ -1,77 +1,87 @@
-import { useState } from "react";
-
+import useCurrentInput from "../hooks/use-current-input";
 const BasicForm = (props) => {
-  const [enteredName, setEnteredName] = useState('');
-  const [enteredNameTouched, setEnteredNameTouched] = useState(false);
 
-  const [enteredEmail, setEnteredEmail] = useState('');
-  const [enteredEmailTouched, setEnteredEmailTouched] = useState(false);
+  const {
+    value:enteredFirstName,
+    isValid:isEnteredFirstNameIsValid,
+    hasError:firstNameInputIsInvalid,
+    valueInputChangeHandler:firstNameInputChangeHandler,
+    valueBlurHandler:firstNameBlurHandler,
+    reset:resetFirstNameInput,
 
-  const isEnteredNameIsValid=enteredName.trim() !=='';
-  const nameInputIsInvalid= !isEnteredNameIsValid && enteredNameTouched;
 
-  const isEnteredEmailIsValid=enteredEmail.includes('@');
-  const emailInputIsInvalid= !isEnteredEmailIsValid && enteredEmailTouched;
+  }= useCurrentInput((value)=>value.trim() !=='');
+
+  const {
+    value:enteredLastName,
+    isValid:isEnteredLastNameIsValid,
+    hasError:lastNameInputIsInvalid,
+    valueInputChangeHandler:lastNameInputChangeHandler,
+    valueBlurHandler:lastNameBlurHandler,
+    reset:resetLastNameInput,
+
+
+  }= useCurrentInput((value)=>value.trim() !=='');
+
+  
+  const {
+    value:enteredEmail,
+    isValid:isEnteredEmailIsValid,
+    hasError:emailInputIsInvalid,
+    valueInputChangeHandler:emailInputChangeHandler,
+    valueBlurHandler:emailBlurHandler,
+    reset:resetEmailInput,
+
+
+  }= useCurrentInput((value)=>value.includes('@'));
+
 
   let isFormValid=false;
 
-  if(isEnteredNameIsValid && isEnteredEmailIsValid){
+  if(isEnteredFirstNameIsValid && isEnteredEmailIsValid && isEnteredLastNameIsValid){
     isFormValid=true;
   }
 
-  const nameInputChangeHandler=(event)=>{
-    setEnteredName(event.target.value);
-  }
-
-  const nameBlurHandler=(event)=>{
-    setEnteredNameTouched(true);
-  }
-
-  const emailInputChangeHandler=(event)=>{
-    setEnteredEmail(event.target.value);
-  }
-
-  const emailBlurHandler=(event)=>{
-    setEnteredEmailTouched(true);
-  }
   
 
   const submitFormHandler=(event)=>{
     event.preventDefault();
 
-    setEnteredNameTouched(true);
-    setEnteredEmailTouched(true);
-
-    if(!isEnteredNameIsValid || !isEnteredEmailIsValid){
+    if(!isEnteredFirstNameIsValid || !isEnteredEmailIsValid || !isEnteredLastNameIsValid){
       return;
     }
 
-    setEnteredName('');
-    setEnteredNameTouched(false);
-
-    setEnteredEmail('');
-    setEnteredEmailTouched(false);
+    resetFirstNameInput();
+    resetLastNameInput();
+    resetEmailInput();
   }
 
-  const nameInputClassInvalid= nameInputIsInvalid ? 'form-control invalid' : 'form-control';
+  const firstNameInputClassInvalid= firstNameInputIsInvalid ? 'form-control invalid' : 'form-control';
+  const lastNameInputClassInvalid= lastNameInputIsInvalid ? 'form-control invalid' : 'form-control';
   const emailInputClassInvalid= emailInputIsInvalid ? 'form-control invalid' : 'form-control';
   
   return (
     <form onSubmit={submitFormHandler}>
       <div className='control-group'>
-        <div className={nameInputClassInvalid}>
-          <label htmlFor='name'>First Name</label>
+        <div className={firstNameInputClassInvalid}>
+          <label htmlFor='fname'>First Name</label>
           <input 
-          id='name'
-          value={enteredName} 
+          id='fname'
+          value={enteredFirstName} 
           type='text'
-          onChange={nameInputChangeHandler}
-          onBlur={nameBlurHandler}   />
-          {nameInputIsInvalid && (<p className="error-text">input name is not valid.</p>)}
+          onChange={firstNameInputChangeHandler}
+          onBlur={firstNameBlurHandler}   />
+          {firstNameInputIsInvalid && (<p className="error-text">input first name is not valid.</p>)}
         </div>
-        <div className='form-control'>
-          <label htmlFor='name'>Last Name</label>
-          <input type='text' id='name' />
+        <div className={lastNameInputClassInvalid}>
+          <label htmlFor='lname'>Last Name</label>
+          <input 
+          id='lname'
+          value={enteredLastName} 
+          type='text'
+          onChange={lastNameInputChangeHandler}
+          onBlur={lastNameBlurHandler}   />
+          {lastNameInputIsInvalid && (<p className="error-text">input last name is not valid.</p>)}
         </div>
       </div>
       <div className={emailInputClassInvalid}>

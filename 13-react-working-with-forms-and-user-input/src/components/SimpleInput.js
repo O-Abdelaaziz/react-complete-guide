@@ -49,6 +49,7 @@ const SimpleInput = (props) => {
       <div className={nameInputClass}>
         <label htmlFor='name'>Your Name</label>
         <input 
+        value={enteredName}
         type='text' 
         id='name' 
         onChange={nameChangeHandler}
@@ -59,6 +60,7 @@ const SimpleInput = (props) => {
       <div className={emailInputClass}>
         <label htmlFor='email'>Your Email</label>
         <input 
+        value={enteredEmail}
         type='email' 
         id='email' 
         onChange={emailChangeHandler}
