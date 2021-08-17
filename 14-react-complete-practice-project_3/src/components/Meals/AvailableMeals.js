@@ -32,12 +32,12 @@ const DUMMY_MEALS = [
 
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchMeals=async ()=>{
       const response =await fetch('https://react-http-c7642-default-rtdb.firebaseio.com/meals.json');
       const responseData=await response.json();
-
       const loadMeals=[];
 
       for(const key in responseData){
@@ -52,8 +52,16 @@ const AvailableMeals = () => {
     };
 
     fetchMeals();
-
+    setIsLoading(false);
   },[]);
+
+  if(isLoading){
+    return (
+      <section className={classes.mealsLoading}>
+        <p>data is loading ...</p>
+      </section>
+    );
+  }
 
   const mealsList = meals.map((meal) => (
     <MealItem
@@ -68,7 +76,7 @@ const AvailableMeals = () => {
   return (
     <section className={classes.meals}>
       <Card>
-        <ul>{mealsList}</ul>
+       <ul>{mealsList}</ul>
       </Card>
     </section>
   );
