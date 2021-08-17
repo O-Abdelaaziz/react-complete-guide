@@ -1,11 +1,16 @@
 import {useState} from "react";
+import useInput from "../hooks/use-input";
 
 const SimpleInput = (props) => {
-  const [enteredName, setEnteredName] = useState('');
-  const [enteredNameTouched, setEnteredNameTouched] = useState(false);
 
-  const enteredNameIsValid = enteredName.trim() !== '';
-  const nameInputIsInvalid= !enteredNameIsValid && enteredNameTouched;
+  const{
+    value:enteredName,
+    isValid:enteredNameIsValid,
+    hasError:nameInputHasError,
+    valueInputChangeHandler:nameChangeHandler,
+    valueInputBlurHandler:nameBlurHandler,
+    reset:resetNameInput
+  }=useInput((value)=>value.trim() !== '');
   
   let formIsValid=false;
 
@@ -13,31 +18,20 @@ const SimpleInput = (props) => {
     formIsValid=true;
   }
 
-  const nameInputChangeHandler = (event) =>{
-    setEnteredName(event.target.value);
-  }
-
-  const nameInputBlurHandler=(event)=>{
-    setEnteredNameTouched(true);
-  }
-
   const formSubmissionHandler=(event)=>{
     event.preventDefault();
-
-    setEnteredNameTouched(true);
 
     if(!enteredNameIsValid){
       return;
     }
-     setEnteredName('');
-     setEnteredNameTouched(false);
+    resetNameInput();
     /**
      * Not ideal, don't manipulate the dom directly.
      * Let dom manipulation for react.
      */
     //refInputName.current.value='',
   }
-  const nameInputClass = nameInputIsInvalid ? 'form-control invalid' : 'form-control'
+  const nameInputClass = nameInputHasError ? 'form-control invalid' : 'form-control'
 
   return (
     <form onSubmit={formSubmissionHandler}> 
@@ -46,9 +40,9 @@ const SimpleInput = (props) => {
         <input 
         type='text' 
         id='name' 
-        onChange={nameInputChangeHandler}
-        onBlur={nameInputBlurHandler}/>
-        {nameInputIsInvalid && (<p className="error-text">input name is not valid.</p>)}
+        onChange={nameChangeHandler}
+        onBlur={nameBlurHandler}/>
+        {nameInputHasError && (<p className="error-text">input name is not valid.</p>)}
       </div>
       <div className="form-actions">
         <button disabled={!formIsValid}>Submit</button>
