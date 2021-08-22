@@ -25,8 +25,9 @@ function App() {
       isInitial=false;
       return;
     }
-
-    dispatchUi(sendCartData(stateCart));
+    if(stateCart.changed){
+      dispatchUi(sendCartData(stateCart));
+    }
 
   }, [stateCart, dispatchUi])
 
