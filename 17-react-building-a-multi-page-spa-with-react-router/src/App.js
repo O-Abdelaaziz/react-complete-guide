@@ -5,7 +5,6 @@ import Welcome from "./pages/Welcome";
 function App() {
   return (
     <div>
-      <h2>Let's get started!</h2>
       <MainHeader/>
       <Route path='/welcome'><Welcome/></Route>
       <Route path='/product'><Product/></Route>
