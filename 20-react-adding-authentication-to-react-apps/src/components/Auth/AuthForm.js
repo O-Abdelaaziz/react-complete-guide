@@ -5,6 +5,7 @@ const API_KEY = 'AIzaSyDpQngK9L0TleFRhgAXcqZr2v4zxwtTzCs'
 const AuthForm = () => {
 
   const [isLogin, setIsLogin] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
@@ -14,7 +15,7 @@ const AuthForm = () => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-
+    setIsLoading(true);
     if (isLogin) {
 
     } else {
@@ -27,11 +28,17 @@ const AuthForm = () => {
           returnSecureToken: true
         })
       }).then(response => {
+        setIsLoading(false);
         if (response.ok) {
           console.log(response);
         } else {
           response.json().then(data => {
-            console.log(data.error.message);
+            let errorMessage='Authentication failed!';
+            if(data && data.error && data.error.message){
+              errorMessage=data.error.message;
+              console.log(data.error.message);
+            }
+            alert(errorMessage);
           });
         }
       });
@@ -52,7 +59,8 @@ const AuthForm = () => {
           <input type='password' id='password' ref={passwordInputRef} required />
         </div>
         <div className={classes.actions}>
-          <button>{isLogin ? 'Login' : 'Create Account'}</button>
+          {!isLoading && <button>{isLogin ? 'Login' : 'Create Account'}</button>}
+          {isLoading && <p>Sending request</p>}
           <button
             type='button'
             className={classes.toggle}
