@@ -9,7 +9,7 @@ const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const authContext = useContext(AuthContext);
-  const history =useHistory();
+  const history = useHistory();
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
@@ -56,7 +56,8 @@ const AuthForm = () => {
         });
       }
     }).then(data => {
-      authContext.login(data.idToken);
+      const expirationTime = new Date((new Date().getTime() + (+data.expiresIn * 1000)));
+      authContext.login(data.idToken, expirationTime.toISOString());
       history.replace('/');
     }).catch(error => {
       console.log(error);
