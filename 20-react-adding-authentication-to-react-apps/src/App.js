@@ -5,7 +5,7 @@ import Layout from './components/Layout/Layout';
 import UserProfile from './components/Profile/UserProfile';
 import AuthPage from './pages/AuthPage';
 import HomePage from './pages/HomePage';
-import AuthContext from './store/auth';
+import AuthContext from './store/auth-context';
 
 function App() {
   const authContext = useContext(AuthContext);
