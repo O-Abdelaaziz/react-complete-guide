@@ -15,35 +15,47 @@ const AuthForm = () => {
 
   const submitHandler = (event) => {
     event.preventDefault();
+
     setIsLoading(true);
+    let url;
     if (isLogin) {
-
+      url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + API_KEY;
     } else {
-      fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key='+API_KEY, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: emailInputRef.current.value,
-          password: passwordInputRef.current.value,
-          returnSecureToken: true
-        })
-      }).then(response => {
-        setIsLoading(false);
-        if (response.ok) {
-          console.log(response);
-        } else {
-          response.json().then(data => {
-            let errorMessage='Authentication failed!';
-            if(data && data.error && data.error.message){
-              errorMessage=data.error.message;
-              console.log(data.error.message);
-            }
-            alert(errorMessage);
-          });
-        }
-      });
-
+      url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + API_KEY;
     }
+
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: emailInputRef.current.value,
+        password: passwordInputRef.current.value,
+        returnSecureToken: true
+      })
+    }).then(response => {
+
+      setIsLoading(false);
+
+      if (response.ok) {
+        // console.log(response);
+        return response.json();
+
+      } else {
+        response.json().then(data => {
+          let errorMessage = 'Authentication failed!';
+          if (data && data.error && data.error.message) {
+            errorMessage = data.error.message;
+            console.log(data.error.message);
+          }
+          alert(errorMessage);
+          throw new Error(errorMessage);
+        });
+      }
+    }).then(data => {
+      console.log(data);
+    }).catch(error => {
+      console.log(error);
+    });
   }
 
   return (
