@@ -57,7 +57,7 @@ const AuthForm = () => {
       }
     }).then(data => {
       authContext.login(data.idToken);
-      history.push('/profile');
+      history.replace('/');
     }).catch(error => {
       console.log(error);
     });
