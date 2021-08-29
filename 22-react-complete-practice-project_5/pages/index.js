@@ -24,12 +24,24 @@ function HomePage(props) {
         <MeetupList meetups={props.DUMMY_MEETUPS} />
     );
 }
-export async function getStaticProps(){
-    return{
-        props:{
-            meetups:DUMMY_MEETUPS,
-            revalidate:10,
-        }
+
+// export async function getServerSideProps(context) {
+//     const req =context.res;
+//     const res =context.req;
+//     return {
+//         props: {
+//             meetups: DUMMY_MEETUPS,
+//         },
+//     };
+// };
+//like cache system (Laravel !!!)
+export async function getStaticProps() {
+    return {
+        props: {
+            meetups: DUMMY_MEETUPS,
+            revalidate: 10,
+        },
+        revalidate: 10,
     };
 };
 export default HomePage;
