@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import AuthContext from '../../store/auth-context';
 
 import classes from './AuthForm.module.css';
-const API_KEY = 'AIzaSyDpQngK9L0TleFRhgAXcqZr2v4zxwtTzCs'
+const API_KEY = ''
 const AuthForm = () => {
 
   const [isLogin, setIsLogin] = useState(true);
