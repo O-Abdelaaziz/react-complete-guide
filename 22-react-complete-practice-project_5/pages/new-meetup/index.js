@@ -1,3 +1,4 @@
+import Layout from "../../components/layout/Layout";
 import NewMeetupForm from "../../components/meetups/NewMeetupForm";
 
 function NewMeetupPage() {
@@ -6,7 +7,9 @@ function NewMeetupPage() {
         console.log(enteredMeetupData);
     }
 
-    return <NewMeetupForm onAddMeetup={addMeetupHandler} />
+    return (
+        <NewMeetupForm onAddMeetup={addMeetupHandler} />
+    );
 }
 
 export default NewMeetupPage;
