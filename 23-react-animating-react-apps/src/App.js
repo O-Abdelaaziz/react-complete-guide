@@ -6,14 +6,15 @@ import Backdrop from "./components/Backdrop/Backdrop";
 import List from "./components/List/List";
 
 class App extends Component {
+
   state = {
     modalIsOpen: false,
   }
 
-  openModalHandler() {
+  openModalHandler = () => {
     this.setState({ modalIsOpen: true });
   }
-  closeModalHandler() {
+  closeModalHandler = () => {
     this.setState({ modalIsOpen: false });
   }
 
