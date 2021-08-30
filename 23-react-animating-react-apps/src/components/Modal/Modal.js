@@ -1,6 +1,5 @@
 import React from 'react';
 import CSSTransition from "react-transition-group/CSSTransition";
-
 import './Modal.css';
 
 const modal = (props) => {
