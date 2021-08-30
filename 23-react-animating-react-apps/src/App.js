@@ -26,11 +26,11 @@ class App extends Component {
         <button className="Button" onClick={() => this.setState(prevState => ({ showBlock: !prevState.showBlock }))}>Toggle</button>
         <br /><br />
         {/* {this.state.showBlock ? */}
-        <Transition 
-        in={this.state.showBlock} 
-        timeout={1000}
-        mountOnEnter
-        unmountOnExit
+        <Transition
+          in={this.state.showBlock}
+          timeout={1000}
+          mountOnEnter
+          unmountOnExit
         >
           {state =>
             <div style={{
@@ -38,7 +38,7 @@ class App extends Component {
               width: 100,
               height: 100,
               margin: 'auto',
-              transition:'opacity 1s ease-out',
+              transition: 'opacity 1s ease-out',
               opacity: state === 'exiting' ? 0 : 1
             }}></div>
 
@@ -47,7 +47,16 @@ class App extends Component {
         </Transition>
         {/* : null} */}
         <br /><br />
-        {this.state.modalIsOpen ? <Modal show={this.state.modalIsOpen} closed={this.closeModalHandler} /> : null}
+        <Transition
+          mountOnEnter
+          unmountOnExit
+          in={this.state.modalIsOpen}
+          timeout={300}
+        >
+          {state => (
+            <Modal show={state} closed={this.closeModalHandler} />
+          )}
+        </Transition>
         {this.state.modalIsOpen ? <Backdrop /> : null}
         <button className="Button" onClick={this.openModalHandler}>Open Modal</button>
         <h3>Animating Lists</h3>
