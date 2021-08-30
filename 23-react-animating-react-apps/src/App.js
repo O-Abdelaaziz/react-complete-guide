@@ -47,17 +47,12 @@ class App extends Component {
         </Transition>
         {/* : null} */}
         <br /><br />
-        <Transition
-          mountOnEnter
-          unmountOnExit
-          in={this.state.modalIsOpen}
-          timeout={300}
-        >
-          {state => (
-            <Modal show={state} closed={this.closeModalHandler} />
-          )}
-        </Transition>
-        {this.state.modalIsOpen ? <Backdrop /> : null}
+
+
+        <Modal show={this.state.modalIsOpen} closed={this.closeModalHandler} />
+
+
+        {this.state.modalIsOpen ? <Backdrop show={this.state.modalIsOpen} /> : null}
         <button className="Button" onClick={this.openModalHandler}>Open Modal</button>
         <h3>Animating Lists</h3>
         <List />
