@@ -22,7 +22,7 @@ export async function getStaticPaths() {
     client.close();
 
     return {
-        fallback: false,
+        fallback: 'blocking',
 
         paths: result.map(item => (
 
