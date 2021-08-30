@@ -14,9 +14,28 @@ function MeetupDetailsPage() {
         </Fragment>
     );
 }
+export async function getStaticPaths() {
+return{
+    fallback:false,
+    paths:[
+        {
+            params:{
+                meetupId:'m1'
+            }
+        },
+        {
+            params:{
+                meetupId:'m2'
+            }
+        },
+    ]
+} 
+}
 
 export async function getStaticProps(context) {
     const meetupId = context.params.meetupId;
+    //this can't log in browser console ... it's running during build time in ide console
+    console.log(meetupId);
     return {
         props: {
             meetupData: {

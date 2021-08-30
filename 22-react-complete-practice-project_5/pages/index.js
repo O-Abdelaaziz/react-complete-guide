@@ -21,7 +21,7 @@ const DUMMY_MEETUPS = [
 function HomePage(props) {
 
     return (
-        <MeetupList meetups={props.DUMMY_MEETUPS} />
+        <MeetupList meetups={props.meetups} />
     );
 }
 
@@ -36,11 +36,12 @@ function HomePage(props) {
 // };
 //like cache system (Laravel !!!)
 export async function getStaticProps() {
+    // fetch data from an API
     return {
-        props: {
-            meetups: DUMMY_MEETUPS,
-        },
-        revalidate: 10,
-    };
-};
+      props: {
+        meetups: DUMMY_MEETUPS
+      },
+      revalidate: 1
+    }; 
+  }
 export default HomePage;
