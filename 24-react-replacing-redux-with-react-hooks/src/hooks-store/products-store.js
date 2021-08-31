@@ -28,7 +28,7 @@ const initialState = [
 ];
 
 
-const configureStore = () => {
+const ConfigureStore = () => {
     const actions = {
         TOGGLE_FAV: (curState,productId) => {
 
@@ -47,4 +47,4 @@ const configureStore = () => {
     }
     initStore(actions,{products:initialState});
 }
-export default configureStore;
+export default ConfigureStore;
