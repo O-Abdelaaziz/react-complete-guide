@@ -25,7 +25,9 @@ function Ingredients() {
   }, []);
 
 
-
+  const filteredIngredientsHandler = (filteredIngredients) => {
+    setUerIngredients(filteredIngredients)
+  }
 
   const addIngredientHandler = (ingredient) => {
     fetch('https://react-http-c7642-default-rtdb.firebaseio.com/ingredients.json', {
@@ -36,17 +38,16 @@ function Ingredients() {
       response.json();
     }).then(responseData => {
       setUerIngredients(prevIngredients => {
-        return [...prevIngredients, { id: responseData.name.toString(), ...ingredient }]
+        return [...prevIngredients, { id: responseData.title.toString(), ...ingredient }]
       });
     });
-
   }
   return (
     <div className="App">
       <IngredientForm onAddIngredient={addIngredientHandler} />
 
       <section>
-        <Search />
+        <Search onLoadedIngredients={filteredIngredientsHandler} />
         <IngredientList ingredients={userIngredients} onRemoveItem={() => { }} />
       </section>
     </div>
