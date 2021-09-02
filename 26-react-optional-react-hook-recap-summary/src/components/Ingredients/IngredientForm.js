@@ -6,18 +6,24 @@ import './IngredientForm.css';
 const IngredientForm = React.memo(props => {
   // const [titleInput, setTitleInput] = useState('');
   // const [amountInput, setAmount] = useState('');
-  const inputState= useState({ title: '', amount: '' });
+  const inputState = useState({ title: '', amount: '' });
 
   const titleInputChangeHandler = (event) => {
     //setTitleInput(event.target.value);
-    inputState[1]({title:event.target.value});
-    console.log(inputState[1]({title:event.target.value}));
+    const newTitle=event.target.value;
+    inputState[1]((prevState) => {
+      return { title: newTitle, amount: prevState.amount }
+    });
+    console.log(inputState[1]({ title: event.target.value, amount: inputState[0].amount }));
   }
 
   const amountInputChangeHandler = (event) => {
     //setAmount(event.target.value);
-    inputState[1]({amount:event.target.value});
-    console.log(inputState[1]({title:event.target.value}));
+    const newAmount=event.target.value;
+    inputState[1]((prevState) => {
+      return { amount: newAmount, title: prevState.title }
+    });
+    console.log(inputState[1]({ amount: event.target.value, title: inputState[0].title }));
   }
 
   const submitHandler = event => {
