@@ -6,24 +6,24 @@ import './IngredientForm.css';
 const IngredientForm = React.memo(props => {
   // const [titleInput, setTitleInput] = useState('');
   // const [amountInput, setAmount] = useState('');
-  const inputState = useState({ title: '', amount: '' });
+  const [inputState,setInputState] = useState({ title: '', amount: '' });
 
   const titleInputChangeHandler = (event) => {
     //setTitleInput(event.target.value);
     const newTitle=event.target.value;
-    inputState[1]((prevState) => {
+    setInputState((prevState) => {
       return { title: newTitle, amount: prevState.amount }
     });
-    console.log(inputState[1]({ title: event.target.value, amount: inputState[0].amount }));
+    console.log(inputState.title);
   }
 
   const amountInputChangeHandler = (event) => {
     //setAmount(event.target.value);
     const newAmount=event.target.value;
-    inputState[1]((prevState) => {
+    setInputState((prevState) => {
       return { amount: newAmount, title: prevState.title }
     });
-    console.log(inputState[1]({ amount: event.target.value, title: inputState[0].title }));
+    console.log(inputState.amount);
   }
 
   const submitHandler = event => {
@@ -37,11 +37,11 @@ const IngredientForm = React.memo(props => {
         <form onSubmit={submitHandler}>
           <div className="form-control">
             <label htmlFor="title">Name</label>
-            <input type="text" id="title" value={inputState[0].title} onChange={titleInputChangeHandler} />
+            <input type="text" id="title" value={inputState.title} onChange={titleInputChangeHandler} />
           </div>
           <div className="form-control">
             <label htmlFor="amount">Amount</label>
-            <input type="number" id="amount" value={inputState[0].amount} onChange={amountInputChangeHandler} />
+            <input type="number" id="amount" value={inputState.amount} onChange={amountInputChangeHandler} />
           </div>
           <div className="ingredient-form__actions">
             <button type="submit">Add Ingredient</button>
