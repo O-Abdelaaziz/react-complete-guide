@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer, useState } from 'react';
+import React, { useCallback, useReducer } from 'react';
 import ErrorModal from '../UI/ErrorModal';
 
 import IngredientForm from './IngredientForm';
@@ -18,57 +18,70 @@ const ingredientReducer = (currentState, action) => {
   }
 }
 
+const httpReducer = (currentState, action) => {
+  switch (action.type) {
+    case 'SEND':
+      return { loading: true, error: false };
+    case 'RESPONSE':
+      return { ...currentState, loading: false };
+    case 'ERROR':
+      return { loading: false, error: action.error };
+    case 'CLEAR':
+      return { ...currentState, error: null };
+    default:
+      throw new Error('Should not get there!');
+  }
+}
+
+
 function Ingredients() {
-  const [userIngredients, dispatch] = useReducer(ingredientReducer, []);
+  const [userIngredients, dispatchIngredients] = useReducer(ingredientReducer, []);
+  const [httpStatus, dispatchHttpStatus] = useReducer(httpReducer, { loading: false, error: null });
   // const [userIngredients, setUerIngredients] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState();
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [error, setError] = useState();
 
 
   const filteredIngredientsHandler = useCallback((filteredIngredients) => {
-    // setUerIngredients(filteredIngredients)
-    dispatch({type:'SET',ingredients:filteredIngredients});
+    dispatchIngredients({ type: 'SET', ingredients: filteredIngredients });
   }, []);
 
   const addIngredientHandler = (ingredient) => {
-    setIsLoading(true);
+    dispatchHttpStatus({ type: 'SEND' });
     fetch('https://react-http-c7642-default-rtdb.firebaseio.com/ingredients.json', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(ingredient)
     })
       .then(response => {
-        setIsLoading(false);
+        dispatchHttpStatus({ type: 'RESPONSE' });
         return response.json();
       }).then(responseData => {
-        // setUerIngredients(prevIngredients => [...prevIngredients, { id: responseData.name, ...ingredient }]);
-        dispatch({type:'ADD',ingredient:{ id: responseData.name, ...ingredient }});
+        dispatchIngredients({ type: 'ADD', ingredient: { id: responseData.name, ...ingredient } });
       });
   }
 
   const removeIngredientsHandler = (ingredientId) => {
-    setIsLoading(true);
+    dispatchHttpStatus({ type: 'SEND' });
     fetch(`https://react-http-c7642-default-rtdb.firebaseio.com/ingredients/${ingredientId}.json`, {
       method: 'DELETE',
     }).then(response => {
-      setIsLoading(false);
-      // setUerIngredients((prevIngredients) => {return prevIngredients.filter(ingredient => ingredient.id !== ingredientId)});
-      dispatch({type:'DELETE',id:ingredientId});
+      dispatchHttpStatus({ type: 'RESPONSE' });
+      dispatchIngredients({ type: 'DELETE', id: ingredientId });
 
     }).catch(error => {
-      setError(error.message);
-      setIsLoading(false);
+      dispatchHttpStatus({ type: 'ERROR', error: error.message });
     });
   }
 
   const clearModel = () => {
-    setError(null)
+    dispatchHttpStatus({ type: 'CLEAR' });
   }
 
   return (
     <div className="App">
-      {error && <ErrorModal onClose={clearModel}>{error}</ErrorModal>}
-      <IngredientForm onAddIngredient={addIngredientHandler} loading={isLoading} />
+      {httpStatus.error && <ErrorModal onClose={clearModel}>{httpStatus.error}</ErrorModal>}
+      <IngredientForm onAddIngredient={addIngredientHandler} loading={httpStatus.loading} />
 
       <section>
         <Search onLoadedIngredients={filteredIngredientsHandler} />
