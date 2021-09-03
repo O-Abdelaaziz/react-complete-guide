@@ -24,7 +24,7 @@ const ingredientReducer = (currentState, action) => {
 
 function Ingredients() {
   const [userIngredients, dispatchIngredients] = useReducer(ingredientReducer, []);
-  const { isLoading, data, error, sendRequest, reqExtra, reqIdentifier } = useHttp();
+  const { isLoading, data, error, sendRequest, reqExtra, reqIdentifier ,clear} = useHttp();
 
   useEffect(() => {
     if (!isLoading && !error && reqIdentifier === 'REMOVING') {
@@ -41,41 +41,25 @@ function Ingredients() {
   const addIngredientHandler = useCallback((ingredient) => {
     sendRequest('https://react-http-c7642-default-rtdb.firebaseio.com/ingredients.json',
       'POST', JSON.stringify(ingredient), ingredient, 'ADDING');
-    // dispatchHttpStatus({ type: 'SEND' });
-    // fetch('https://react-http-c7642-default-rtdb.firebaseio.com/ingredients.json', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(ingredient) 
-    // })
-    //   .then(response => {
-    //     dispatchHttpStatus({ type: 'RESPONSE' });
-    //     return response.json();
-    //   }).then(responseData => {
-    //     dispatchIngredients({ type: 'ADD', ingredient: { id: responseData.name, ...ingredient } });
-    //   });
-  }, []);
+  }, [sendRequest]);
 
   const removeIngredientsHandler = useCallback((ingredientId) => {
-    // dispatchHttpStatus({ type: 'SEND' });
     sendRequest(`https://react-http-c7642-default-rtdb.firebaseio.com/ingredients/${ingredientId}.json/`, 'DELETE'
       , null, ingredientId, 'REMOVING');
 
   }, [sendRequest])
 
-  const clearModel = useCallback(() => {
-    // dispatchHttpStatus({ type: 'CLEAR' });
-  }, []);
 
   const ingredientsList = useMemo(() => {
     return <IngredientList ingredients={userIngredients} onRemoveItem={removeIngredientsHandler} />
   }, [userIngredients, removeIngredientsHandler]);
   return (
     <div className="App">
-      {error && <ErrorModal onClose={clearModel}>{error}</ErrorModal>}
+      {error && <ErrorModal onClose={clear}>{error}</ErrorModal>}
       <IngredientForm onAddIngredient={addIngredientHandler} loading={isLoading} />
 
       <section>
-        <Search onLoadedIngredients={filteredIngredientsHandler} />
+        <Search onLoadIngredients={filteredIngredientsHandler} />
         {ingredientsList}
       </section>
     </div>

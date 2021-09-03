@@ -1,15 +1,16 @@
 import { useCallback, useReducer } from 'react'
 
+const init = { loading: false, error: null, data: null, extra: null, identifier: null };
 const httpReducer = (currentState, action) => {
     switch (action.type) {
         case 'SEND':
             return { loading: true, error: false, data: null, extra: null, identifier: action.identifier };
         case 'RESPONSE':
-            return { ...currentState, loading: false, data:action.responseData ,extra:action.extra };
+            return { ...currentState, loading: false, data: action.responseData, extra: action.extra };
         case 'ERROR':
             return { loading: false, error: action.error };
         case 'CLEAR':
-            return { ...currentState, error: null };
+            return init;
         default:
             throw new Error('Should not get there!');
     }
@@ -17,6 +18,10 @@ const httpReducer = (currentState, action) => {
 
 const useHttp = () => {
     const [httpStatus, dispatchHttpStatus] = useReducer(httpReducer, { loading: false, error: null, data: null, extra: null, identifier: null });
+
+    const clear = useCallback(() => {
+        dispatchHttpStatus({ type: 'CLEAR' });
+    }, []);
 
     const sendRequest = useCallback((url, method, body, reqExtra, reqIdentifier) => {
         dispatchHttpStatus({ type: 'SEND', identifier: reqIdentifier });
@@ -39,7 +44,8 @@ const useHttp = () => {
         error: httpStatus.error,
         sendRequest: sendRequest,
         reqExtra: httpStatus.extra,
-        reqIdentifier:httpStatus.identifier,
+        reqIdentifier: httpStatus.identifier,
+        clear:clear
     };
 };
 
