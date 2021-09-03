@@ -12,7 +12,7 @@ const Search = React.memo(props => {
   }
 
   useEffect(() => {
-    const query = searchInput.length === 0 ? '' : `orderBy="title"&equalTo="${searchInput}"`;
+    const query = searchInput.length === 0 ? '' : `?orderBy="title"&equalTo="${searchInput}"`;
     fetch('https://react-http-c7642-default-rtdb.firebaseio.com/ingredients.json' +query)
       .then(
         response => response.json()
