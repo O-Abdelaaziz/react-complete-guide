@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer, useMemo } from 'react';
+import React, { useCallback, useReducer, useMemo, useEffect } from 'react';
 import useHttp from '../../hooks/http';
 import ErrorModal from '../UI/ErrorModal';
 
@@ -24,18 +24,28 @@ const ingredientReducer = (currentState, action) => {
 
 function Ingredients() {
   const [userIngredients, dispatchIngredients] = useReducer(ingredientReducer, []);
-  const { isLoading, data, error, sendRequest } = useHttp();
+  const { isLoading, data, error, sendRequest, reqExtra, reqIdentifier } = useHttp();
+
+  useEffect(() => {
+    if (!isLoading && !error && reqIdentifier === 'REMOVING') {
+      dispatchIngredients({ type: 'DELETE', id: reqExtra });
+    } else if (!isLoading && !error && reqIdentifier === 'ADDING') {
+      dispatchIngredients({ type: 'ADD', ingredient: { id: data.name, ...reqExtra } });
+    }
+  }, [data, reqExtra, reqIdentifier, isLoading ,error])
 
   const filteredIngredientsHandler = useCallback((filteredIngredients) => {
     dispatchIngredients({ type: 'SET', ingredients: filteredIngredients });
   }, []);
 
   const addIngredientHandler = useCallback((ingredient) => {
+    sendRequest('https://react-http-c7642-default-rtdb.firebaseio.com/ingredients.json',
+      'POST', JSON.stringify(ingredient), ingredient, 'ADDING');
     // dispatchHttpStatus({ type: 'SEND' });
     // fetch('https://react-http-c7642-default-rtdb.firebaseio.com/ingredients.json', {
     //   method: 'POST',
     //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(ingredient)
+    //   body: JSON.stringify(ingredient) 
     // })
     //   .then(response => {
     //     dispatchHttpStatus({ type: 'RESPONSE' });
@@ -47,7 +57,8 @@ function Ingredients() {
 
   const removeIngredientsHandler = useCallback((ingredientId) => {
     // dispatchHttpStatus({ type: 'SEND' });
-    sendRequest(`https://react-http-c7642-default-rtdb.firebaseio.com/ingredients/${ingredientId}.json/`, 'DELETE')
+    sendRequest(`https://react-http-c7642-default-rtdb.firebaseio.com/ingredients/${ingredientId}.json/`, 'DELETE'
+      , null, ingredientId, 'REMOVING');
 
   }, [sendRequest])
 
