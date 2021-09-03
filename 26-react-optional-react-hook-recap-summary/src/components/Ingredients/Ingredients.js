@@ -24,13 +24,24 @@ function Ingredients() {
       });
     });
   }
+
+  const removeIngredientsHandler = (ingredientId) => {
+    fetch(`https://react-http-c7642-default-rtdb.firebaseio.com/ingredients/${ingredientId}.json`, {
+      method: 'DELETE',
+    }).then(response => {
+      setUerIngredients((prevIngredients) => {
+        return prevIngredients.filter(ingredient => ingredient.id !== ingredientId)
+      });
+    });
+  }
+
   return (
     <div className="App">
       <IngredientForm onAddIngredient={addIngredientHandler} />
 
       <section>
         <Search onLoadedIngredients={filteredIngredientsHandler} />
-        <IngredientList ingredients={userIngredients} onRemoveItem={() => { }} />
+        <IngredientList ingredients={userIngredients} onRemoveItem={removeIngredientsHandler} />
       </section>
     </div>
   );
