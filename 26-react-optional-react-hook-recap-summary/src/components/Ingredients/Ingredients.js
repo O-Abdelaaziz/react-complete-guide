@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer } from 'react';
+import React, { useCallback, useReducer, useMemo } from 'react';
 import ErrorModal from '../UI/ErrorModal';
 
 import IngredientForm from './IngredientForm';
@@ -46,7 +46,7 @@ function Ingredients() {
     dispatchIngredients({ type: 'SET', ingredients: filteredIngredients });
   }, []);
 
-  const addIngredientHandler = (ingredient) => {
+  const addIngredientHandler = useCallback((ingredient) => {
     dispatchHttpStatus({ type: 'SEND' });
     fetch('https://react-http-c7642-default-rtdb.firebaseio.com/ingredients.json', {
       method: 'POST',
@@ -59,9 +59,9 @@ function Ingredients() {
       }).then(responseData => {
         dispatchIngredients({ type: 'ADD', ingredient: { id: responseData.name, ...ingredient } });
       });
-  }
+  }, []);
 
-  const removeIngredientsHandler = (ingredientId) => {
+  const removeIngredientsHandler = useCallback((ingredientId) => {
     dispatchHttpStatus({ type: 'SEND' });
     fetch(`https://react-http-c7642-default-rtdb.firebaseio.com/ingredients/${ingredientId}.json`, {
       method: 'DELETE',
@@ -72,12 +72,15 @@ function Ingredients() {
     }).catch(error => {
       dispatchHttpStatus({ type: 'ERROR', error: error.message });
     });
-  }
+  }, [])
 
-  const clearModel = () => {
+  const clearModel = useCallback(() => {
     dispatchHttpStatus({ type: 'CLEAR' });
-  }
+  }, []);
 
+  const ingredientsList = useMemo(() => {
+    return <IngredientList ingredients={userIngredients} onRemoveItem={removeIngredientsHandler} />
+  }, [userIngredients, removeIngredientsHandler]);
   return (
     <div className="App">
       {httpStatus.error && <ErrorModal onClose={clearModel}>{httpStatus.error}</ErrorModal>}
@@ -85,7 +88,7 @@ function Ingredients() {
 
       <section>
         <Search onLoadedIngredients={filteredIngredientsHandler} />
-        <IngredientList ingredients={userIngredients} onRemoveItem={removeIngredientsHandler} />
+        {ingredientsList}
       </section>
     </div>
   );
