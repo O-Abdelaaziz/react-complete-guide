@@ -1,16 +1,33 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useReducer, useState } from 'react';
 import ErrorModal from '../UI/ErrorModal';
 
 import IngredientForm from './IngredientForm';
 import IngredientList from './IngredientList';
 import Search from './Search';
 
+const ingredientReducer = (currentState, action) => {
+  switch (action.type) {
+    case 'SET':
+      return action.ingredients;
+    case 'ADD':
+      return [...currentState, action.ingredient];
+    case 'DELETE':
+      return currentState.filter(ingredient => ingredient.id !== action.id);
+    default:
+      throw new Error('Should not get there!');
+  }
+}
+
 function Ingredients() {
-  const [userIngredients, setUerIngredients] = useState([]);
+  const [userIngredients, dispatch] = useReducer(ingredientReducer, []);
+  // const [userIngredients, setUerIngredients] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+
+
   const filteredIngredientsHandler = useCallback((filteredIngredients) => {
-    setUerIngredients(filteredIngredients)
+    // setUerIngredients(filteredIngredients)
+    dispatch({type:'SET',ingredients:filteredIngredients});
   }, []);
 
   const addIngredientHandler = (ingredient) => {
@@ -24,8 +41,8 @@ function Ingredients() {
         setIsLoading(false);
         return response.json();
       }).then(responseData => {
-        setUerIngredients(prevIngredients => [...prevIngredients, { id: responseData.name, ...ingredient }]
-        );
+        // setUerIngredients(prevIngredients => [...prevIngredients, { id: responseData.name, ...ingredient }]);
+        dispatch({type:'ADD',ingredient:{ id: responseData.name, ...ingredient }});
       });
   }
 
@@ -35,16 +52,16 @@ function Ingredients() {
       method: 'DELETE',
     }).then(response => {
       setIsLoading(false);
-      setUerIngredients((prevIngredients) => {
-        return prevIngredients.filter(ingredient => ingredient.id !== ingredientId)
-      });
+      // setUerIngredients((prevIngredients) => {return prevIngredients.filter(ingredient => ingredient.id !== ingredientId)});
+      dispatch({type:'DELETE',id:ingredientId});
+
     }).catch(error => {
       setError(error.message);
       setIsLoading(false);
     });
   }
 
-  const clearModel = ()=>{
+  const clearModel = () => {
     setError(null)
   }
 
