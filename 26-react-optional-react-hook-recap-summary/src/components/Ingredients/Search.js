@@ -13,7 +13,7 @@ const Search = React.memo(props => {
   }
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       if (searchInput === inputRef.current.value) {
         const query = searchInput.length === 0 ? '' : `?orderBy="title"&equalTo="${searchInput}"`;
         fetch('https://react-http-c7642-default-rtdb.firebaseio.com/ingredients.json' + query)
@@ -32,7 +32,10 @@ const Search = React.memo(props => {
           });
       }
     }, 500);
-  }, [searchInput, onLoadedIngredients,inputRef]);
+    return () => {
+      clearTimeout(timer);
+    }
+  }, [searchInput, onLoadedIngredients, inputRef]);
 
   return (
     <section className="search">
