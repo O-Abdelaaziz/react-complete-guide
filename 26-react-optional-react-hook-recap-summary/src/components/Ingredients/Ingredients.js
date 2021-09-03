@@ -1,4 +1,5 @@
 import React, { useCallback, useReducer, useMemo } from 'react';
+import useHttp from '../../hooks/http';
 import ErrorModal from '../UI/ErrorModal';
 
 import IngredientForm from './IngredientForm';
@@ -18,64 +19,40 @@ const ingredientReducer = (currentState, action) => {
   }
 }
 
-const httpReducer = (currentState, action) => {
-  switch (action.type) {
-    case 'SEND':
-      return { loading: true, error: false };
-    case 'RESPONSE':
-      return { ...currentState, loading: false };
-    case 'ERROR':
-      return { loading: false, error: action.error };
-    case 'CLEAR':
-      return { ...currentState, error: null };
-    default:
-      throw new Error('Should not get there!');
-  }
-}
+
 
 
 function Ingredients() {
   const [userIngredients, dispatchIngredients] = useReducer(ingredientReducer, []);
-  const [httpStatus, dispatchHttpStatus] = useReducer(httpReducer, { loading: false, error: null });
-  // const [userIngredients, setUerIngredients] = useState([]);
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [error, setError] = useState();
-
+  const { isLoading, data, error, sendRequest } = useHttp();
 
   const filteredIngredientsHandler = useCallback((filteredIngredients) => {
     dispatchIngredients({ type: 'SET', ingredients: filteredIngredients });
   }, []);
 
   const addIngredientHandler = useCallback((ingredient) => {
-    dispatchHttpStatus({ type: 'SEND' });
-    fetch('https://react-http-c7642-default-rtdb.firebaseio.com/ingredients.json', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(ingredient)
-    })
-      .then(response => {
-        dispatchHttpStatus({ type: 'RESPONSE' });
-        return response.json();
-      }).then(responseData => {
-        dispatchIngredients({ type: 'ADD', ingredient: { id: responseData.name, ...ingredient } });
-      });
+    // dispatchHttpStatus({ type: 'SEND' });
+    // fetch('https://react-http-c7642-default-rtdb.firebaseio.com/ingredients.json', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(ingredient)
+    // })
+    //   .then(response => {
+    //     dispatchHttpStatus({ type: 'RESPONSE' });
+    //     return response.json();
+    //   }).then(responseData => {
+    //     dispatchIngredients({ type: 'ADD', ingredient: { id: responseData.name, ...ingredient } });
+    //   });
   }, []);
 
   const removeIngredientsHandler = useCallback((ingredientId) => {
-    dispatchHttpStatus({ type: 'SEND' });
-    fetch(`https://react-http-c7642-default-rtdb.firebaseio.com/ingredients/${ingredientId}.json`, {
-      method: 'DELETE',
-    }).then(response => {
-      dispatchHttpStatus({ type: 'RESPONSE' });
-      dispatchIngredients({ type: 'DELETE', id: ingredientId });
+    // dispatchHttpStatus({ type: 'SEND' });
+    sendRequest(`https://react-http-c7642-default-rtdb.firebaseio.com/ingredients/${ingredientId}.json/`, 'DELETE')
 
-    }).catch(error => {
-      dispatchHttpStatus({ type: 'ERROR', error: error.message });
-    });
-  }, [])
+  }, [sendRequest])
 
   const clearModel = useCallback(() => {
-    dispatchHttpStatus({ type: 'CLEAR' });
+    // dispatchHttpStatus({ type: 'CLEAR' });
   }, []);
 
   const ingredientsList = useMemo(() => {
@@ -83,8 +60,8 @@ function Ingredients() {
   }, [userIngredients, removeIngredientsHandler]);
   return (
     <div className="App">
-      {httpStatus.error && <ErrorModal onClose={clearModel}>{httpStatus.error}</ErrorModal>}
-      <IngredientForm onAddIngredient={addIngredientHandler} loading={httpStatus.loading} />
+      {error && <ErrorModal onClose={clearModel}>{error}</ErrorModal>}
+      <IngredientForm onAddIngredient={addIngredientHandler} loading={isLoading} />
 
       <section>
         <Search onLoadedIngredients={filteredIngredientsHandler} />
