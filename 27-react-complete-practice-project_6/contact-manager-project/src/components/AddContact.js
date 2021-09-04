@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 
-const AddContact = () => {
+const AddContact = (props) => {
     const nameInputRef = useRef();
     const emailInputRef = useRef();
 
@@ -12,7 +12,10 @@ const AddContact = () => {
         if(name ==='' && email=== ''){
             alert("name or email can't be empty!");
         }
-        console.log({name,email});
+        props.onAddContact({name,email});
+
+        nameInputRef.current.value='';
+        emailInputRef.current.value='';
     }
     return (
         <div className="ui main">
