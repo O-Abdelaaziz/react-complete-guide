@@ -3,9 +3,9 @@ import ContactCard from './ContactCard'
 
 const ContactList = (props) => {
 
-    const renderContactList= props.contacts.map(contact =>{
-        return(
-            <ContactCard key={contact.id} contact={contact}/>
+    const renderContactList = props.contacts.map((contact) => {
+        return (
+            <ContactCard key={contact.id} contact={contact} />
         )
     })
     return (
