@@ -4,11 +4,18 @@ import ContactList from './components/ContactList';
 import Header from './components/Header';
 
 function App() {
+  const contactList=[
+    {
+      id:'1',
+      name:'abdelaaziz',
+      email:'abdelaaziz@gmail.com',
+    }
+  ];
   return (
-    <div>
+    <div className="ui container">
       <Header/>
       <AddContact/>
-      <ContactList/>
+      <ContactList contacts={contactList}/>
     </div>
   );
 }
