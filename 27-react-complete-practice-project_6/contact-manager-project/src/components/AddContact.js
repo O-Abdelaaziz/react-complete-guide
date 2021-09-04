@@ -12,7 +12,7 @@ const AddContact = (props) => {
         if(name ==='' || email=== ''){
             alert("name or email can't be empty!");
         }
-        props.onAddContact({id:Math.random().toString(),name,email});
+        props.onAddContact({name,email});
 
         nameInputRef.current.value='';
         emailInputRef.current.value='';

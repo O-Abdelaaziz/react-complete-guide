@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { uuid } from 'uuidv4';
 import './App.css';
 import AddContact from './components/AddContact';
 import ContactList from './components/ContactList';
@@ -11,8 +12,13 @@ function App() {
 
   const addContactHandler = (contact) => {
     setContacts(prevContacts => {
-      return [...prevContacts, contact];
+      return [...prevContacts, {id:uuid() ,...contact}];
     })
+  }
+
+  const removeHandler =(id)=>{
+    const newContact=contacts.filter(contact => contact.id !==id);
+    setContacts(newContact);
   }
 
   useEffect(() => {
@@ -32,7 +38,7 @@ function App() {
     <div className="ui container">
       <Header />
       <AddContact onAddContact={addContactHandler} />
-      <ContactList contacts={contacts} />
+      <ContactList contacts={contacts} onRemove={removeHandler} />
     </div>
   );
 }
