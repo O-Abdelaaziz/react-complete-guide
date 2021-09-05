@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Redirect, Route, Switch } from 'react-router';
 import { uuid } from 'uuidv4';
 import './App.css';
 import AddContact from './components/AddContact';
@@ -12,12 +13,12 @@ function App() {
 
   const addContactHandler = (contact) => {
     setContacts(prevContacts => {
-      return [...prevContacts, {id:uuid() ,...contact}];
+      return [...prevContacts, { id: uuid(), ...contact }];
     })
   }
 
-  const removeHandler =(id)=>{
-    const newContact=contacts.filter(contact => contact.id !==id);
+  const removeHandler = (id) => {
+    const newContact = contacts.filter(contact => contact.id !== id);
     setContacts(newContact);
   }
 
@@ -37,8 +38,17 @@ function App() {
   return (
     <div className="ui container">
       <Header />
-      <AddContact onAddContact={addContactHandler} />
-      <ContactList contacts={contacts} onRemove={removeHandler} />
+      <Switch>
+        <Route path="/" exact>
+          <Redirect to="/contacts" />
+        </Route>
+        <Route path="/contacts">
+          <ContactList contacts={contacts} onRemove={removeHandler} />
+        </Route>
+        <Route path="/new-contact" exact>
+          <AddContact onAddContact={addContactHandler} />
+        </Route>
+      </Switch>
     </div>
   );
 }

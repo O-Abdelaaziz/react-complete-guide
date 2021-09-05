@@ -11,6 +11,7 @@ const AddContact = (props) => {
 
         if(name ==='' || email=== ''){
             alert("name or email can't be empty!");
+            return;
         }
         props.onAddContact({name,email});
 
