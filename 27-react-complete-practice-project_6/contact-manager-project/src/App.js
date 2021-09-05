@@ -3,11 +3,12 @@ import { Redirect, Route, Switch } from 'react-router';
 import { uuid } from 'uuidv4';
 import './App.css';
 import AddContact from './components/AddContact';
+import ContactDetail from './components/ContactDetail';
 import ContactList from './components/ContactList';
 import Header from './components/Header';
 
 const LOCAL_STORAGE_KEY = "contacts"
-function App() {
+function App(props) {
   //const getContacts=localStorage.getItem(LOCAL_STORAGE_KEY);
   const [contacts, setContacts] = useState([]);
 
@@ -23,7 +24,6 @@ function App() {
   }
 
   useEffect(() => {
-    console.log('run from get cone');
     const retrieveContacts = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
     if (retrieveContacts) {
       setContacts(retrieveContacts);
@@ -31,7 +31,6 @@ function App() {
   }, [])
 
   useEffect(() => {
-    console.log('run from set cone');
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts));
   }, [contacts])
 
@@ -42,10 +41,13 @@ function App() {
         <Route path="/" exact>
           <Redirect to="/contacts" />
         </Route>
-        <Route path="/contacts">
+        <Route path="/contacts" exact>
           <ContactList contacts={contacts} onRemove={removeHandler} />
         </Route>
-        <Route path="/new-contact" exact>
+        <Route path="/contacts/:id">
+          <ContactDetail />
+        </Route>
+        <Route path="/new-contact">
           <AddContact onAddContact={addContactHandler} />
         </Route>
       </Switch>
