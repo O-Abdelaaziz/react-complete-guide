@@ -14,33 +14,35 @@ import EditContact from './components/EditContact';
 const LOCAL_STORAGE_KEY = "contacts"
 function App(props) {
   const [contacts, setContacts] = useState([]);
+  const [search, setSearch] = useState('');
+  const [searchResult, setSearchResult] = useState([]);
 
-  const retrieveContacts =  async () => {
-    const response = await  instanceApi.get("/contacts");
+  const retrieveContacts = async () => {
+    const response = await instanceApi.get("/contacts");
     return response.data;
   };
 
-  const addContactHandler = async(contact) => {
-    const request={ id: uuid(), ...contact };
-    const response=await instanceApi.post('/contacts',request);
+  const addContactHandler = async (contact) => {
+    const request = { id: uuid(), ...contact };
+    const response = await instanceApi.post('/contacts', request);
     setContacts(prevContacts => {
       return [...prevContacts, response.data];
     });
   };
 
-  const updateContactHandler = async(contact)=>{
-    const response=await instanceApi.put(`/contacts/${contact.id}`,contact)
+  const updateContactHandler = async (contact) => {
+    const response = await instanceApi.put(`/contacts/${contact.id}`, contact)
     const { id, name, email } = response.data;
     setContacts(
-      contacts.map(contact=>{
-        return contact.id===id ?{...response.data} : contact;
+      contacts.map(contact => {
+        return contact.id === id ? { ...response.data } : contact;
       })
     );
   }
-  const removeHandler =async (id) => {
+  const removeHandler = async (id) => {
     await instanceApi.delete(`/contacts/${id}`);
-     const newContact = contacts.filter(contact => contact.id !== id);
-      setContacts(newContact);
+    const newContact = contacts.filter(contact => contact.id !== id);
+    setContacts(newContact);
   }
 
   useEffect(() => {
@@ -57,6 +59,24 @@ function App(props) {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts));
   }, [contacts])
 
+
+  const searchHandler = (searchTerm) => {
+    setSearch(searchTerm);
+    if (searchTerm !== '') {
+      const newContactList = contacts.filter(
+        (contact) => {
+          return Object.values(contact)
+            .join(" ")
+            .toString().toLowerCase()
+            .includes(searchTerm.toString().toLowerCase());
+        }
+      );
+      setSearchResult(newContactList);
+    }else{
+      setSearchResult(contacts);
+    }
+
+  }
   return (
     <div className="ui container">
       <Header />
@@ -65,7 +85,7 @@ function App(props) {
           <Redirect to="/contacts" />
         </Route>
         <Route path="/contacts" exact>
-          <ContactList contacts={contacts} onRemove={removeHandler} />
+          <ContactList term={search} searchKeyword={searchHandler} contacts={search.length < 1 ? contacts : searchResult} onRemove={removeHandler} />
         </Route>
         <Route path="/contacts/:id">
           <ContactDetail />
