@@ -13,12 +13,16 @@ const ExercisesItem = (props) => {
                 console.error(error);
             })
     }
+    const toggleExerciseStatusHandler= ()=>{
+        props.onToggleExercise(props.exercise.id);
+    }
     return (
         <div className={classes.exercise}>
             <div className={classes.actions}>
                 <h4>{props.exercise.title}</h4>
                 <div className={classes.buttons}>
                     <button className="button" onClick={removeExerciseHandler}>Remove</button>
+                    <button className="button" onClick={toggleExerciseStatusHandler}>Toggle</button>
                 </div>
             </div>
             <div className={classes.details}>

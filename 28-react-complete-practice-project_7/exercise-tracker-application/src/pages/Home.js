@@ -5,8 +5,28 @@ const Home = (props) => {
     const [exercises, setExercises] = useState([]);
 
     const removeExerciseHandler = (id) => {
-        const patchedExercise=exercises.filter(exercise => exercise.id !==id);
+        const patchedExercise = exercises.filter(exercise => exercise.id !== id);
         setExercises(patchedExercise);
+    }
+
+    const toggleExerciseStatusHandler = (id) => {
+        // console.log("The id: "+id);
+        // const cloneExercises = [...exercises];
+        // const clickedExerciseIndex = cloneExercises.findIndex(exercise => exercise.id === id);
+        // const clickedExercise=cloneExercises[clickedExerciseIndex];
+        // clickedExercise.complete = !clickedExercise.complete;
+        //setExercises(cloneExercises);
+        setExercises((prevExerciseState) => {
+            const exerciseIndex = prevExerciseState.findIndex(exercise => exercise.id === id); //1,5,23654,.... etc;
+            const newExerciseStatus = !prevExerciseState[exerciseIndex].complete;
+            const updateExerciseList = [...prevExerciseState];
+            updateExerciseList[exerciseIndex] = {
+                ...prevExerciseState[exerciseIndex],
+                complete: newExerciseStatus,
+            };
+            console.log(updateExerciseList);
+            return updateExerciseList;
+        });
     }
 
     useEffect(() => {
@@ -28,7 +48,7 @@ const Home = (props) => {
     }, [])
     return (
         <div>
-            <ExercisesList onRemoveExercise={removeExerciseHandler} exercises={exercises} />
+            <ExercisesList onRemoveExercise={removeExerciseHandler} onToggleExercise={toggleExerciseStatusHandler} exercises={exercises} />
         </div>
     )
 }

@@ -6,7 +6,7 @@ const ExercisesList = (props) => {
     return (
         <div className={classes['exercises-list']}>
             {props.exercises.map(exercise => {
-                return <ExercisesItem onRemoveExercise={props.onRemoveExercise} key={exercise.id} exercise={exercise}/>
+                return <ExercisesItem onToggleExercise ={props.onToggleExercise} onRemoveExercise={props.onRemoveExercise} key={exercise.id} exercise={exercise}/>
             })}
         </div>
     )
