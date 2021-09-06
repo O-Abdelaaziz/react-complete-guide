@@ -1,6 +1,7 @@
 import './App.css';
 import Home from './pages/Home';
 import { Redirect, Route, Switch } from 'react-router';
+import CreateExercise from './pages/CreateExercise';
 
 function App() {
   return (
@@ -9,8 +10,11 @@ function App() {
         <Route path='/' exact>
           <Redirect to='/home' />
         </Route>
-        <Route to='/home'>
+        <Route path='/home' exact>
           <Home />
+        </Route>
+        <Route path='/create-exercise' >
+          <CreateExercise />
         </Route>
       </Switch>
     </div >
