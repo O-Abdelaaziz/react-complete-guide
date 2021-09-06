@@ -14,7 +14,15 @@ const ExercisesItem = (props) => {
             })
     }
     const toggleExerciseStatusHandler = () => {
-        props.onToggleExercise(props.exercise.id);
+        fetch(`http://localhost:3006/exercises/${props.exercise.id}`, {
+            headers: { 'Content-Type': 'application/json' },
+            method: 'PATCH',
+            body: JSON.stringify({ complete: !props.exercise.complete })
+        }).then(() => {
+            props.onToggleExercise(props.exercise.id);
+        }).catch((error) => {
+            console.error(error);
+        })
     }
     // const exerciseClassStatus = `${classes.exercise} ${props.exercise.complete ? classes.complete : ''}`;
     const exerciseClassStyle = [classes.exercise];

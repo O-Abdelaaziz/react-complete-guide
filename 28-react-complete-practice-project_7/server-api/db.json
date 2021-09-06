@@ -3,7 +3,7 @@
     {
       "title": "Lorem Ipsum",
       "details": "Lorem Ipsum",
-      "complete": false,
+      "complete": true,
       "id": 7581
     }
   ]
