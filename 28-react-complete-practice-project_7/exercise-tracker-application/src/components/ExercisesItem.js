@@ -13,11 +13,17 @@ const ExercisesItem = (props) => {
                 console.error(error);
             })
     }
-    const toggleExerciseStatusHandler= ()=>{
+    const toggleExerciseStatusHandler = () => {
         props.onToggleExercise(props.exercise.id);
     }
+    // const exerciseClassStatus = `${classes.exercise} ${props.exercise.complete ? classes.complete : ''}`;
+    const exerciseClassStyle = [classes.exercise];
+    if (props.exercise.complete) {
+        exerciseClassStyle.push(classes.complete)
+    }
+
     return (
-        <div className={classes.exercise}>
+        <div className={exerciseClassStyle.join(' ')}>
             <div className={classes.actions}>
                 <h4>{props.exercise.title}</h4>
                 <div className={classes.buttons}>
