@@ -7,6 +7,7 @@ import ContactDetail from './components/ContactDetail';
 import ContactList from './components/ContactList';
 import Header from './components/Header';
 import instanceApi from './api/contacts';
+import EditContact from './components/EditContact';
 
 
 
@@ -19,15 +20,27 @@ function App(props) {
     return response.data;
   };
 
-  const addContactHandler = (contact) => {
+  const addContactHandler = async(contact) => {
+    const request={ id: uuid(), ...contact };
+    const response=await instanceApi.post('/contacts',request);
     setContacts(prevContacts => {
-      return [...prevContacts, { id: uuid(), ...contact }];
+      return [...prevContacts, response.data];
     });
   };
 
-  const removeHandler = (id) => {
-    const newContact = contacts.filter(contact => contact.id !== id);
-    setContacts(newContact);
+  const updateContactHandler = async(contact)=>{
+    const response=await instanceApi.put(`/contacts/${contact.id}`,contact)
+    const { id, name, email } = response.data;
+    setContacts(
+      contacts.map(contact=>{
+        return contact.id===id ?{...response.data} : contact;
+      })
+    );
+  }
+  const removeHandler =async (id) => {
+    await instanceApi.delete(`/contacts/${id}`);
+     const newContact = contacts.filter(contact => contact.id !== id);
+      setContacts(newContact);
   }
 
   useEffect(() => {
@@ -59,6 +72,9 @@ function App(props) {
         </Route>
         <Route path="/new-contact">
           <AddContact onAddContact={addContactHandler} />
+        </Route>
+        <Route path="/edit/:id">
+          <EditContact onUpdateContact={updateContactHandler} />
         </Route>
       </Switch>
     </div>

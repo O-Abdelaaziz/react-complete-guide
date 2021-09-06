@@ -1,8 +1,10 @@
 import React, { useRef } from 'react'
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 
-const AddContact = (props) => {
+const EditContact = (props) => {
+    const location = useLocation();
+    const { id, name, email } = location.state.contact;
     const nameInputRef = useRef();
     const emailInputRef = useRef();
     const history = useHistory();
@@ -16,7 +18,7 @@ const AddContact = (props) => {
             alert("name or email can't be empty!");
             return;
         }
-        props.onAddContact({ name, email });
+        props.onUpdateContact({id, name, email });
 
         nameInputRef.current.value = '';
         emailInputRef.current.value = '';
@@ -24,24 +26,24 @@ const AddContact = (props) => {
     }
     return (
         <div className="ui main">
-            <h2>Add Contact
-            <Link to="/">
-                 <button onClick={()=>{history.push('/')}} className="ui button blue right">Show Contacts</button>
-            </Link>
+            <h2>Update Contact
+                <Link to="/">
+                    <button onClick={() => { history.push('/') }} className="ui button blue right">Show Contacts</button>
+                </Link>
             </h2>
             <form className="ui form" onSubmit={submitHandler}>
                 <div className="field">
                     <label htmlFor="name">Name</label>
-                    <input id="name" type="text" name="name" placeholder="contact name" ref={nameInputRef} />
+                    <input id="name" type="text" name="name" placeholder="contact name" ref={nameInputRef} defaultValue={name} />
                 </div>
                 <div className="field">
                     <label htmlFor="email">Email</label>
-                    <input id="email" type="email" name="email" placeholder="contact email" ref={emailInputRef} />
+                    <input id="email" type="email" name="email" placeholder="contact email" ref={emailInputRef} defaultValue={email} />
                 </div>
-                <button className="ui button blue">Save</button>
+                <button className="ui button blue">Edit</button>
             </form>
         </div>
     )
 }
 
-export default AddContact
+export default EditContact
