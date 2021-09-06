@@ -1,12 +1,14 @@
-import React from 'react'
+import React from 'react';
+import ExercisesItem from './ExercisesItem';
+import classes from "./ExercisesList.module.css";
 
 const ExercisesList = (props) => {
     return (
-        <ul>
+        <div className={classes['exercises-list']}>
             {props.exercises.map(exercise => {
-                return <li key={exercise.id}>{exercise.title}</li>
+                return <ExercisesItem key={exercise.id} exercise={exercise}/>
             })}
-        </ul>
+        </div>
     )
 }
 
