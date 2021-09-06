@@ -3,7 +3,15 @@ import classes from './ExerciserItem.module.css';
 const ExercisesItem = (props) => {
 
     const removeExerciseHandler = () => {
-        props.onRemoveExercise(props.exercise.id);
+        fetch(`http://localhost:3006/exercises/${props.exercise.id}`, {
+            method: 'DELETE'
+        })
+            .then(() => {
+                props.onRemoveExercise(props.exercise.id);
+            })
+            .catch((error) => {
+                console.error(error);
+            })
     }
     return (
         <div className={classes.exercise}>
