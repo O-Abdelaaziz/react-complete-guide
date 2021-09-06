@@ -6,17 +6,24 @@ import AddContact from './components/AddContact';
 import ContactDetail from './components/ContactDetail';
 import ContactList from './components/ContactList';
 import Header from './components/Header';
+import instanceApi from './api/contacts';
+
+
 
 const LOCAL_STORAGE_KEY = "contacts"
 function App(props) {
-  //const getContacts=localStorage.getItem(LOCAL_STORAGE_KEY);
   const [contacts, setContacts] = useState([]);
+
+  const retrieveContacts =  async () => {
+    const response = await  instanceApi.get("/contacts");
+    return response.data;
+  };
 
   const addContactHandler = (contact) => {
     setContacts(prevContacts => {
       return [...prevContacts, { id: uuid(), ...contact }];
-    })
-  }
+    });
+  };
 
   const removeHandler = (id) => {
     const newContact = contacts.filter(contact => contact.id !== id);
@@ -24,10 +31,13 @@ function App(props) {
   }
 
   useEffect(() => {
-    const retrieveContacts = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-    if (retrieveContacts) {
-      setContacts(retrieveContacts);
+    const getAllContacts = async () => {
+      const getContacts = await retrieveContacts();
+      if (getContacts) {
+        setContacts(getContacts);
+      }
     }
+    getAllContacts();
   }, [])
 
   useEffect(() => {
