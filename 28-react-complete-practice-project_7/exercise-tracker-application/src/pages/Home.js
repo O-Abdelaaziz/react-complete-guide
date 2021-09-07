@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import BaseFilter from '../components/BaseFilter';
 import ExercisesList from '../components/ExercisesList';
+import { FilterStatus } from '../helper/Utils';
 
 const Home = (props) => {
     const [exercises, setExercises] = useState([]);
+    const [currentFilter, setCurrentFilter] = useState(FilterStatus.ALL);
 
     const removeExerciseHandler = (id) => {
         const patchedExercise = exercises.filter(exercise => exercise.id !== id);
@@ -24,9 +27,12 @@ const Home = (props) => {
                 ...prevExerciseState[exerciseIndex],
                 complete: newExerciseStatus,
             };
-            console.log(updateExerciseList);
             return updateExerciseList;
         });
+    }
+
+    const updateFilterStatusHandler = (netFilter) => {
+        setCurrentFilter(netFilter);
     }
 
     useEffect(() => {
@@ -39,16 +45,28 @@ const Home = (props) => {
                     console.log(error.message);
                 })
                 .then(fetchedExercises => {
-                    console.log(fetchedExercises);
                     setExercises(fetchedExercises);
                 });
         }
-        console.log("from useEffect");
         response();
-    }, [])
+    }, []);
+
+    const filterStyleHandler = () => {
+        let currentStyle ;
+        if (currentFilter === FilterStatus.COMPLETE) {
+             currentStyle = <ExercisesList onRemoveExercise={removeExerciseHandler} onToggleExercise={toggleExerciseStatusHandler} exercises={exercises.filter(exercise => exercise.complete)} />;
+            return currentStyle 
+        } else if (currentFilter === FilterStatus.PENDING) {
+             currentStyle = <ExercisesList onRemoveExercise={removeExerciseHandler} onToggleExercise={toggleExerciseStatusHandler} exercises={exercises.filter(exercise => !exercise.complete)} />;
+            return currentStyle
+        } else {
+            return <ExercisesList onRemoveExercise={removeExerciseHandler} onToggleExercise={toggleExerciseStatusHandler} exercises={exercises} />
+        }
+    }
     return (
         <div>
-            <ExercisesList onRemoveExercise={removeExerciseHandler} onToggleExercise={toggleExerciseStatusHandler} exercises={exercises} />
+            <BaseFilter onFilter={updateFilterStatusHandler} current={currentFilter} />
+            {filterStyleHandler()}
         </div>
     )
 }
