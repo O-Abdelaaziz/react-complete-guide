@@ -2,10 +2,12 @@ import './App.css';
 import Home from './pages/Home';
 import { Redirect, Route, Switch } from 'react-router';
 import CreateExercise from './pages/CreateExercise';
+import Navbar from './components/Navbar';
 
 function App() {
   return (
     <div className="App">
+      <Navbar/>
       <Switch>
         <Route path='/' exact>
           <Redirect to='/home' />
