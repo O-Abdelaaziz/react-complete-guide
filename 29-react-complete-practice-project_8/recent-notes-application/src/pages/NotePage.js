@@ -1,17 +1,19 @@
 import React from 'react'
 import { useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 import NotesData from '../assets/NotesData';
 
 const NotePage = (props) => {
     const params = useParams();
-    console.log(props);
-    let note = NotesData.find(note => note.id == params.id);
-    console.log("note",note)
+    let note = NotesData.find(note => note.id === +params.id);
     return (
-        <div>
-            <p>Param using hook {params.id}</p>
-            <p>Param using props {props.match.params.id}</p>
-            <p>{note?.body}</p>
+        <div className="note">
+            <div className="note-header">
+                <h3>
+                    <Link to="/">Go Left</Link>
+                </h3>
+            </div>
+            <textarea value={note?.body}></textarea>
         </div>
     )
 }

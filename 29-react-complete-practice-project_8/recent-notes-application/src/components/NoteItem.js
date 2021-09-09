@@ -2,7 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 
 const NoteItem = props => {
-    console.log("props: ", props);
     const { note } = props;
 
     return (

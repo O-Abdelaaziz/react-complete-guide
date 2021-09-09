@@ -4,11 +4,16 @@ import NoteItem from '../components/NoteItem';
 
 const NotesPage = () => {
     return (
-        <div>
-            <p>notes</p>
-            {NotesData.map(note => {
-                return <NoteItem key={note.id} note={note} />
-            })}
+        <div className="notes">
+            <div className="notes-header">
+                <h2 className="notes-title">&#9782; Notes</h2>
+                <p className="notes-count">{NotesData.length}</p>
+            </div>
+            <div className="notes-list">
+                {NotesData.map((note, index) => {
+                    return <NoteItem key={index} note={note} />
+                })}
+            </div>
         </div>
     )
 }
