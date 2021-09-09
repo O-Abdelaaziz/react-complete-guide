@@ -1,11 +1,27 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
-import NotesData from '../assets/NotesData';
+// import NotesData from '../assets/NotesData';
 
 const NotePage = (props) => {
+    const [note, setNote] = useState(null)
     const params = useParams();
-    let note = NotesData.find(note => note.id === +params.id);
+    const noteId = params.id;
+    // let note = NotesData.find(note => note.id === +params.id);
+
+    useEffect(() => {
+        const response = async () => {
+            await fetch(`http://localhost:3006/notes/${noteId}`)
+                .then((response) => {
+                    return response.json();
+                }).then((data) => {
+                    setNote(data);
+                });
+        }
+
+        response();
+    }, [noteId]);
+
     return (
         <div className="note">
             <div className="note-header">
