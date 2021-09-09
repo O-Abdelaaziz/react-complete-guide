@@ -10,7 +10,7 @@ const NotePage = (props) => {
         <div className="note">
             <div className="note-header">
                 <h3>
-                    <Link to="/">Go Left</Link>
+                    <Link to="/"><i className="fa fa-arrow-circle-left fa-2x"></i></Link>
                 </h3>
             </div>
             <textarea value={note?.body}></textarea>
