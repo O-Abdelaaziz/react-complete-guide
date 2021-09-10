@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router } from 'react-router-dom';
 import 'font-awesome/css/font-awesome.min.css';
+import 'react-notifications/lib/notifications.css';
 
 ReactDOM.render(
   <React.StrictMode>

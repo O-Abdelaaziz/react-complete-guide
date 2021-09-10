@@ -3,8 +3,10 @@ import './App.css';
 import Header from './components/Header';
 import NotePage from './pages/NotePage';
 import NotesPage from './pages/NotesPage';
+import { NotificationContainer } from 'react-notifications';
 
 function App() {
+
   return (
     <div className="container dark">
       <div className="app">
@@ -15,6 +17,7 @@ function App() {
           <Route path="/notes/:id" component={NotePage} />
         </Switch>
       </div>
+      <NotificationContainer />
     </div>
   );
 }

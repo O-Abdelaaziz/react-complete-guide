@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
+import CreateNotification, { NotificationType } from '../helpers/ReactNotification';
 // import NotesData from '../assets/NotesData';
 
 const NotePage = (props) => {
@@ -8,6 +9,9 @@ const NotePage = (props) => {
     const params = useParams();
     const noteId = params.id;
     // let note = NotesData.find(note => note.id === +params.id);
+
+    const notification =CreateNotification(NotificationType.INFO,'INSERT NEW NOTE','new not has been inserted successfully.');
+    
     useEffect(() => {
         const response = async () => {
             if (noteId === 'new') return;
@@ -64,8 +68,11 @@ const NotePage = (props) => {
                 method: 'POST',
                 body: JSON.stringify({ ...note, created: new Date().toISOString(), updated: new Date().toISOString() })
             }).then((response) => {
-                props.history.push('/');
-            }).catch((error) => {
+                //props.history.push('/');
+            }).then(()=>{
+                notification();
+            })
+            .catch((error) => {
                 console.error(error);
             });
         }
@@ -85,6 +92,7 @@ const NotePage = (props) => {
                     </h3>}
             </div>
             <textarea value={note?.body} onChange={noteInputChangeHandler}></textarea>
+            
         </div>
     )
 }
