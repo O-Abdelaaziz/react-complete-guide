@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 import NoteItem from '../components/NoteItem';
 
 const NotesPage = () => {
@@ -28,6 +29,9 @@ const NotesPage = () => {
                     return <NoteItem key={index} note={note} />
                 })}
             </div>
+            <Link to="/notes/new" className="floating-button">
+                <i className="fa fa-plus-circle" ></i>
+            </Link>
         </div>
     )
 }

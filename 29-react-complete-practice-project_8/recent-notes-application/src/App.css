@@ -175,7 +175,8 @@ a {
   position: absolute;
   bottom: 24px;
   right: 16px;
-  background: var(--color-main);
+  /* background: var(--color-main); */
+  color: var(--color-main);
   border: none;
   width: 60px;
   height: 60px;
@@ -184,12 +185,13 @@ a {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2); */
 }
 
 
 .floating-button > svg {
-  fill: var(--color-bg);
+  fill: var(--color-main);
+  /* color: var(--color-main); */
 }
 
 
