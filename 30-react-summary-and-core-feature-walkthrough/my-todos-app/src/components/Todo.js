@@ -1,10 +1,10 @@
 import React from 'react'
 
 const Todo = (props) => {
-    const deleteHandler =()=>{
+    const deleteHandler = () => {
         console.log("clicked!");
     }
-    
+
     return (
         <div className="card">
             <h2>{props.title}</h2>
