@@ -22,7 +22,8 @@ const DUMMY_DATA = [
     },
 ];
 
-const AllMeetup = () => {
+const AllMeetup = (props) => {
+
     return (
         <section>
             <h1>Meetups</h1>
